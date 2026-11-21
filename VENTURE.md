@@ -108,8 +108,8 @@ Verified 2026-11-21:
 - `node --test tests/unit/`: 4/4 pass (filter, validation, scoring/ranking/ties, every bank question passes server validation).
   The validation test caught a real bug (an unanswered question `c: null` was accepted as answer 0); fixed.
 - `tests/e2e/run.mjs` in real Chromium 1255 (Maya: 390px phone; Sam: 390px phone with an Instagram iOS user agent; Lea: 1280px desktop):
-  **passes on local `wrangler pages dev` and on production** (deploy e498f00b; re-run on b750fde3 after the
-  Search Console tag was added). Covers empty-name error, pack choice, swap, custom question, add/remove, create, public API
+  **passes on local `wrangler pages dev` and on production**: deploy e498f00b (after one flake, below) and again on the
+  current deploy b750fde3 (the Search Console tag added). Covers empty-name error, pack choice, swap, custom question, add/remove, create, public API
   hides the answers, 10/10 run with feedback, score card render, reload keeps the result, duplicate and blocked nicknames,
   resume mid-quiz after reload, rank #2, OG text "2 friends played · top score 10/10", 404 for an unknown quiz, owner picks and
   removal, private link on a new device, report, HTML shown as text, "Your quizzes" list, delete → "Quiz not found", static
@@ -126,7 +126,7 @@ languages other than English.
 
 ## Metrics
 
-- 2026-11-21: launched today. 0 real quizzes, 0 takers (prod D1 count after the e2e cleanup). Search Console: no data yet.
+- 2026-11-21: launched today. GitHub Pages build run 44932790916: success. 0 real quizzes, 0 takers (prod D1 count after the e2e cleanup). Search Console: no data yet.
 
 ## Next steps
 
