@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Knowsies · How well do your friends know you? Free quiz maker</title>
+  <meta name="description" content="Make a free “How well do you know me?” quiz in 60 seconds. Share the link to your story or group chat and see who knows you best on the leaderboard. No ads, no sign-up.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Knowsies">
+  <meta property="og:title" content="How well do your friends really know you?">
+  <meta property="og:description" content="Make a quiz about yourself in 60 seconds, share the link, and see who knows you best. Free, no ads, no sign-up.">
+  <meta property="og:image" content="https://pb-know-me-quiz.pages.dev/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://pb-know-me-quiz.pages.dev/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://pb-know-me-quiz.pages.dev/">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon-180.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="google-site-verification" content="g6R95T8-VFARk0PYhc-lkqete3o5OcxzkrFJ0B-vI4E" />
+<meta name="theme-color" content="#fbf8f4">
+  <link rel="stylesheet" href="/app.css">
+  <script type="module" src="/home.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top"><a class="logo" href="/"><img src="/icon.svg" alt="">Knowsies</a><a class="small" href="#how">How it works</a></header>
+
+    <main>
+      <section id="start">
+        <div class="hero">
+          <h1>How well do your friends <span>really</span> know you?</h1>
+          <p class="lead">Answer 10 questions about yourself, share one link, and watch the leaderboard fill up. Takes about 60 seconds.</p>
+        </div>
+        <form id="startForm" class="card stack" novalidate>
+          <div>
+            <label for="name">Your first name</label>
+            <input type="text" id="name" maxlength="24" autocomplete="given-name" placeholder="e.g. Maya" enterkeyhint="next">
+          </div>
+          <div>
+            <label id="packLabel">Pick a question pack</label>
+            <div class="packs" id="packs" role="group" aria-labelledby="packLabel"></div>
+          </div>
+          <p class="err" id="startErr" role="alert"></p>
+          <button class="btn block" type="submit">Pick my answers →</button>
+        </form>
+        <ul class="badges"><li>✓ Free</li><li>✓ No sign-up</li><li>✓ No ads</li><li>✓ Deleted after 90 days</li></ul>
+        <div id="mine" class="mine card hide"><h3>Your quizzes</h3><div id="mineList"></div></div>
+      </section>
+
+      <section id="build" class="hide">
+        <div class="hero" style="padding-bottom:16px">
+          <h2 id="buildTitle">Answer for yourself</h2>
+          <p class="muted" style="margin:0">Tap your real answer on each question. Don't like one? Swap it or write your own.</p>
+        </div>
+        <div id="qlist" class="stack"></div>
+        <div class="center" style="margin-top:14px"><button class="btn line sm" id="addQ" type="button">+ Add a question</button></div>
+        <div class="bar">
+          <div class="meta"><span id="doneCount">0 of 10 answered</span><button class="linkbtn small" id="backBtn" type="button">← Back</button></div>
+          <div class="meter" aria-hidden="true"><i id="meterFill"></i></div>
+          <p class="err" id="buildErr" role="alert" style="margin:6px 0"></p>
+          <button class="btn block coral" id="createBtn" type="button" disabled>Create my quiz</button>
+        </div>
+      </section>
+
+      <section id="how">
+        <div class="steps">
+          <div class="card"><span class="n">1</span><p><b>Answer 10 questions</b> about yourself. Pick a pack or write your own.</p></div>
+          <div class="card"><span class="n">2</span><p><b>Share your link</b> to your story, WhatsApp group or Discord.</p></div>
+          <div class="card"><span class="n">3</span><p><b>See who knows you best</b> on your live leaderboard.</p></div>
+        </div>
+        <h2>Questions people ask</h2>
+        <div class="faq">
+          <details><summary>Do my friends need an app or an account?</summary><p>No. They open the link, type a nickname and play in their browser, including inside Instagram, Snapchat and WhatsApp.</p></details>
+          <details><summary>Can my friends see the answers before they play?</summary><p>No. Each answer is revealed only after they lock in their guess, so nobody can peek.</p></details>
+          <details><summary>What do you store?</summary><p>Your first name, your questions and answers, and each friend's nickname and score. No email, no phone number, no tracking. Every quiz is deleted 90 days after it was made, or straight away when you delete it.</p></details>
+          <details><summary>How do I see my results later?</summary><p>Keep the creator link we show you after you make the quiz. This browser also remembers your quizzes on the home page.</p></details>
+          <details><summary>Is it really free?</summary><p>Yes. No ads between questions, no paywall on results.</p></details>
+          <details><summary>Someone made a mean quiz. What can I do?</summary><p>Tap “Report this quiz” at the bottom of the quiz page. Quizzes with several reports are taken down automatically. Names and custom questions are also filtered for insults.</p></details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot"><div class="row"><span>© 2026 Knowsies</span><span><a href="/privacy">Privacy</a><a href="/about">About</a></span></div></footer>
+  </div>
+</body>
+</html>

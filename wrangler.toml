@@ -1,0 +1,8 @@
+name = "pb-know-me-quiz"
+pages_build_output_dir = "public"
+compatibility_date = "2025-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pb-know-me-quiz"
+database_id = "80751e97-0002-4f08-bb8f-3c7899ee4088"

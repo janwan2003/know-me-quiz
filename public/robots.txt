@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Sitemap: https://pb-know-me-quiz.pages.dev/sitemap.xml

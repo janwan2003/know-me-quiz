@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Privacy policy · Knowsies</title>
+  <meta name="description" content="Privacy policy for Knowsies, the free “How well do you know me?” quiz maker.">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top"><a class="logo" href="/"><img src="icon.svg" alt="">Knowsies</a><a class="btn ghost sm" href="https://pb-know-me-quiz.pages.dev/">Make a quiz</a></header>
+    <main class="legal">
+      <h1 style="font-size:2rem">Privacy policy</h1>
+      <p class="muted">Last updated 21 November 2026</p>
+      <p>Knowsies lets you make a “How well do you know me?” quiz and share it with friends. We collect only what the quiz needs to work.</p>
+      <h2>What we store</h2>
+      <ul>
+        <li><b>Quiz creators:</b> the first name you type, your questions and your answers, and a fingerprint (hash) of your private creator key.</li>
+        <li><b>People taking a quiz:</b> the nickname you type, the answers you pick and your score, and a hash of your private play key.</li>
+        <li><b>Abuse protection:</b> a short-lived counter per network address (IP) to stop one visitor from flooding the service. Counters expire within an hour, except a per-quiz marker that stops the same network reporting a quiz twice, which expires with the quiz.</li>
+      </ul>
+      <p>We do not ask for an email address, phone number or account. We do not use cookies, analytics trackers, advertising or third-party scripts. Your browser keeps your private keys in its local storage so you can come back to your quiz or your score.</p>
+      <h2>Who can see what</h2>
+      <p>Anyone with the quiz link can see the creator’s first name, the questions, and the leaderboard of nicknames and scores. The correct answers are shown to a player only after they answer each question. Only the creator (with the private creator link) can see which answer each player picked, remove players and delete the quiz.</p>
+      <h2>How long we keep it</h2>
+      <p>Every quiz is deleted, together with all of its scores, 90 days after it was created. A creator can delete it sooner with “Delete quiz now”. Quizzes reported by several people are hidden automatically.</p>
+      <h2>Where it is stored</h2>
+      <p>Data is stored on Cloudflare (Cloudflare Pages and D1), which hosts the service.</p>
+      <h2>Children</h2>
+      <p>Knowsies is meant for people aged 13 and over. Please don’t put personal details such as addresses, phone numbers or school names in a quiz.</p>
+      <h2>Contact</h2>
+      <p>Questions or removal requests: open an issue at <a href="https://github.com/janwan2003/know-me-quiz/issues">github.com/janwan2003/know-me-quiz/issues</a>, or use “Report this quiz” on the quiz page.</p>
+    </main>
+    <footer class="foot"><div class="row"><span>© 2026 Knowsies</span><span><a href="privacy.html">Privacy</a><a href="index.html">About</a></span></div></footer>
+  </div>
+</body>
+</html>
