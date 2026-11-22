@@ -130,6 +130,7 @@ async function quizView(env, request, quiz) {
     })),
   };
   if (owner) {
+    view.hidden = !!quiz.hidden;
     const row = await env.DB.prepare('SELECT COUNT(*) AS n FROM attempts WHERE quiz_id = ?1 AND done = 0').bind(quiz.id).first();
     view.in_progress = row.n;
   }

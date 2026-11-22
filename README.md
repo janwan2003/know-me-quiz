@@ -20,9 +20,10 @@ Cloudflare Pages (static files in `public/`) + Pages Functions (`functions/`) + 
 npx pnpm@9 install
 npx wrangler d1 execute pb-know-me-quiz --local --file schema.sql
 npx wrangler pages dev public --port 8823
-node --test tests/unit/          # unit tests
+node --test tests/unit/*.test.js # unit tests (Node 22 needs the glob, not the folder)
 node tests/e2e/run.mjs           # e2e in real Chromium against BASE (default http://localhost:8823)
-BASE=https://pb-know-me-quiz.pages.dev node tests/e2e/run.mjs   # against production (cleans up after itself)
+node tests/e2e/edge.mjs          # edge cases: 320/360 px phones, a long name, a player removed or the quiz deleted mid-game, a reported quiz
+BASE=https://pb-know-me-quiz.pages.dev node tests/e2e/run.mjs   # against production (cleans up after itself; edge.mjs too, minus the local-only reported-quiz case)
 node tools/render-images.mjs     # og.png and icons
 ```
 

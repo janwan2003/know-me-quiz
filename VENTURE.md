@@ -4,7 +4,7 @@ stage: launched
 priority: 4
 url: https://pb-know-me-quiz.pages.dev
 repo: https://github.com/janwan2003/know-me-quiz
-updated: 2026-11-21
+updated: 2026-11-22
 ---
 
 # know-me-quiz (brand: **Knowsies**)
@@ -119,6 +119,24 @@ Verified 2026-11-21:
 - Screenshots checked by eye: landing (phone and desktop), builder, creator dashboard, intro, question, feedback, result, score card.
   Fixed after review: a lone 5th pack card, footer alignment, score-card header now names the quiz owner.
 
+Verified 2026-11-22 (quality session, deploy 412791d6):
+- `node --test tests/unit/*.test.js` 4/4 (the old docs said `node --test tests/unit/`, which Node 22 rejects; fixed in README).
+- `tests/e2e/run.mjs` (unchanged flow above) and the new `tests/e2e/edge.mjs` both **pass locally and on production**, 0 console errors.
+  `edge.mjs` covers: 320 px and 360 px phones with a 22-character name (no sideways overflow on landing, builder, edit,
+  dashboard, story modal, intro, question, result), story image pixels stay inside the card, score-card button padding,
+  `?new=1` stripped, Back after creating, a player removed mid-quiz, the quiz deleted mid-quiz, and (local only) a reported
+  quiz showing the creator a notice. Prod D1 after both runs: 0 quizzes, 0 attempts (`wrangler d1 execute --remote`, COUNT).
+- Fixed, each shown failing on the old code with the same test: "Share my score" button sat 1 px from the result card's edge;
+  a long one-word name spilled out of the story image (19 dark pixels outside the card); a player removed by the creator, or
+  playing when the quiz was deleted, got stuck on an error toast (now: nickname screen with "This game was reset by the quiz
+  creator", or "Quiz not found"); `?new=1` stayed in the URL so every reload said "Your quiz is ready!".
+- Fixed by eye from screenshots: owner leaderboard rank badge dropped to the bottom of an expanded row (now top, with a "›"
+  hint that rows open); empty error lines left a gap between inputs and buttons; "How it works" link pointed at a hidden
+  section while building.
+- Defensive, not reproduced: Back after creating could restore the old builder from the back/forward cache and allow a second
+  quiz; headless Chromium did not restore from that cache, so the fix (re-read the draft on `pageshow`) is untested there.
+- New: the creator sees "This quiz was taken down after several reports" on a hidden quiz (the API sends `hidden` to the owner only).
+
 Not covered: real iOS Safari / Android Chrome and the real Instagram/Snapchat/WhatsApp in-app browsers (only the UA was
 emulated); how WhatsApp/iMessage render the preview; `navigator.share` with files on real phones (the fallback is a modal
 with a press-and-hold image); rate limits and the 3-report takedown were not exercised (local IP is a single key);
@@ -130,6 +148,9 @@ languages other than English.
 
 ## Next steps
 
+0. Next quality pass: run the e2e on WebKit (Playwright's Safari engine; not installed here, ~100 MB, disk is at 98%) to cover
+   iOS rendering and the back/forward-cache fix; the rate limit (60 quiz starts per IP per hour) may block a class or a
+   carrier-NAT audience when one story goes viral, so consider raising it.
 1. Get a first real quiz posted (operator ask in OPERATOR-INBOX). The loop needs a seed; the product has 0 users.
 2. Per-quiz OG image (Worker-rendered PNG with name, players and top score) so the preview shows live state as an image, not only text.
 3. Test on real phones in the Instagram/Snapchat/WhatsApp in-app browsers (share sheet, download fallback, keyboard over inputs).
@@ -147,3 +168,6 @@ unobtrusive ad slot on the results page, never between questions. Keep the creat
 - 2026-11-20 scout: created idea. Evidence: web searches for friendship-quiz sites, their Semrush
   traffic sources and trend coverage (links above). Did not open pages or measure search volume.
 - 2026-11-21 builder: sanity-checked the evidence (one new data point: an 8.9M-install app of the same format), named it Knowsies, built and launched it on Cloudflare Pages + D1 with a 150-question bank, the creator builder, a taker flow with server-side answer reveal, a live leaderboard, story/score images, a word filter, reports and 90-day expiry. Unit 4/4; e2e passes locally and on production (one 522 flake, re-run green); Search Console verified with sitemap submitted; GitHub Pages product page published.
+- 2026-11-21 review: kept p4. live URL 200 with 0 console errors in headless Chromium at 390 px, Search Console 0 impressions 2026-11-01→11-21, prod D1 0 rows in every table (Cloudflare D1 API, 19:20 UTC). Under 21 days live, so no traction verdict. Proven format (8.9M-install app per builder); story-image sharing is the strongest outside-the-group loop in the portfolio.
+- 2026-11-22 review: kept p4. URL 200, 0 console errors (headless Chromium, 390 px, 2026-11-22 ~03:40 UTC); Search Console 0 impressions 11-01→11-22; prod D1 0 rows in every data table (Cloudflare D1 API, read-only COUNT). Under 21 days live, so no traction verdict. Proven format with story sharing, the strongest broadcast loop of the launched apps.
+- 2026-11-22 builder (quality): screenshots at 320/360/390 px and 1280 px reviewed; fixed 7 UI/flow bugs (result-card button padding, long name spilling out of the story image, player stuck after removal or quiz deletion, `?new=1`, owner leaderboard layout, empty-error gaps, dead "How it works" link) plus a defensive Back-after-create fix and a taken-down notice for creators. New `tests/e2e/edge.mjs`; unit 4/4, run.mjs and edge.mjs pass locally and on prod deploy 412791d6 with 0 console errors; prod D1 0 rows after cleanup.

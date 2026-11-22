@@ -186,6 +186,7 @@ function show() {
   $('#start').classList.toggle('hide', !!building);
   $('#how').classList.toggle('hide', !!building);
   $('#build').classList.toggle('hide', !building);
+  $('#howLink').classList.toggle('hide', !!building);
   if (building) renderBuild();
   else { $('#name').value = draft.name || ''; renderPacks(); renderMine(); }
 }
@@ -195,4 +196,12 @@ if (params.get('pack') && PACKS.some((p) => p.id === params.get('pack'))) draft.
 if (params.get('from')) draft.step = 'start';
 show();
 if (params.get('from')) setTimeout(() => $('#name').focus(), 50);
-window.addEventListener('pageshow', (e) => { if (e.persisted) show(); });
+// Back from a quiz page restores this page from the back/forward cache with the old in-memory draft.
+// Re-read it from storage so a quiz that was already created cannot be submitted twice.
+window.addEventListener('pageshow', (e) => {
+  if (!e.persisted) return;
+  draft = store.get('kn_draft') || { name: draft.name, pack: draft.pack, questions: [], step: 'start' };
+  const btn = $('#createBtn');
+  btn.textContent = 'Create my quiz';
+  show();
+});

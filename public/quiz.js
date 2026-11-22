@@ -52,7 +52,7 @@ function boardList(rows, { meNick, owner } = {}) {
         );
         return el(
           'li',
-          {},
+          { class: 'own' },
           el('span', { class: 'r', text: r.rank }),
           el('details', {}, el('summary', {}, el('span', { class: 'nm', text: r.nick }), el('span', { class: 'sc', text: scoreText })), picks),
           el('button', {
@@ -82,6 +82,8 @@ function ownerView() {
   document.title = `Your quiz · Knowsies`;
   $('#makeTop').classList.add('hide');
   const fresh = params.get('new') === '1';
+  // Show "ready" once; a reload or a saved bookmark then shows the normal dashboard title.
+  if (fresh) history.replaceState(null, '', location.pathname);
   const shareText = `How well do you know me? Take my quiz 👀`;
   const privateUrl = `${quizUrl}#k=${ownerToken}`;
   const linkInput = el('input', { type: 'text', readonly: true, value: quizUrl, 'aria-label': 'Your quiz link', onfocus: (e) => e.target.select() });
@@ -92,7 +94,8 @@ function ownerView() {
       { class: 'qhero' },
       el('div', { class: 'avatar', text: initial(quiz.name) }),
       el('h1', { style: 'font-size:2rem', text: fresh ? 'Your quiz is ready! 🎉' : `${quiz.name}'s quiz` }),
-      el('p', { class: 'muted', style: 'margin:0', text: 'Share the link. Scores show up here as your friends play.' })
+      el('p', { class: 'muted', style: 'margin:0', text: 'Share the link. Scores show up here as your friends play.' }),
+      quiz.hidden ? el('p', { class: 'notice', role: 'status', text: 'This quiz was taken down after several reports. Friends can no longer open it. You can still see your results here.' }) : ''
     ),
     el(
       'div',
@@ -249,6 +252,8 @@ function playView(state) {
               }, res.correct ? 900 : 1500);
             } catch (err) {
               if (err.status === 409) return resume();
+              // The quiz was deleted or taken down, or the creator removed this player: start over cleanly.
+              if (err.status === 404 || err.status === 410) return restart(err.status === 410 ? err.message : 'This game was reset by the quiz creator.');
               locked = false;
               answers.classList.remove('locked');
               e.currentTarget.setAttribute('aria-pressed', 'false');
@@ -365,6 +370,19 @@ function roundRect(ctx, x, y, w, h, r) {
 
 const FONT = 'ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
 
+// Sets the font, shrinking it until the text (whole = true) or its longest word fits maxWidth.
+// Names can be one long word ("Maximilianna-Josephine"), which wrapLines cannot break.
+function fitFont(ctx, text, weight, size, maxWidth, whole = false) {
+  const parts = whole ? [String(text)] : String(text).split(' ');
+  let s = size;
+  for (; s > 24; s -= 4) {
+    ctx.font = `${weight} ${s}px ${FONT}`;
+    if (parts.every((w) => ctx.measureText(w).width <= maxWidth)) break;
+  }
+  ctx.font = `${weight} ${s}px ${FONT}`;
+  return s;
+}
+
 function footer(ctx, line1, header = 'How well do you know me?') {
   ctx.fillStyle = '#ffffff';
   ctx.font = `800 64px ${FONT}`;
@@ -375,8 +393,8 @@ function footer(ctx, line1, header = 'How well do you know me?') {
   ctx.globalAlpha = 1;
   ctx.font = `800 44px ${FONT}`;
   ctx.fillText('Knowsies', 540, 1800);
-  ctx.font = `800 52px ${FONT}`;
-  wrapLines(ctx, header, 900).slice(0, 2).forEach((l, k, all) => ctx.fillText(l, 540, 250 - (all.length - 1) * 33 + k * 66));
+  const hs = fitFont(ctx, header, 800, 52, 900);
+  wrapLines(ctx, header, 900).slice(0, 2).forEach((l, k, all) => ctx.fillText(l, 540, 250 - (all.length - 1) * (hs * 0.64) + k * hs * 1.27));
 }
 
 function storyCard() {
@@ -389,8 +407,9 @@ function storyCard() {
   ctx.font = `900 120px ${FONT}`;
   ctx.fillText(initial(quiz.name), 540, 603);
   ctx.fillStyle = '#1c1a2e';
-  ctx.font = `900 96px ${FONT}`;
-  wrapLines(ctx, `How well do you know ${quiz.name}?`, 780).slice(0, 3).forEach((l, k) => ctx.fillText(l, 540, 820 + k * 110));
+  const title = `How well do you know ${quiz.name}?`;
+  const ts = fitFont(ctx, title, 900, 96, 780);
+  wrapLines(ctx, title, 780).slice(0, 3).forEach((l, k) => ctx.fillText(l, 540, 820 + k * ts * 1.15));
   ctx.fillStyle = '#807c96';
   ctx.font = `600 46px ${FONT}`;
   ctx.fillText(`${quiz.total} questions · about a minute`, 540, 1180);
@@ -404,7 +423,7 @@ function storyCard() {
 function resultCard(res) {
   const { c, ctx } = canvasBase();
   ctx.fillStyle = '#807c96';
-  ctx.font = `700 52px ${FONT}`;
+  fitFont(ctx, `I know ${quiz.name}`, 700, 52, 780, true);
   ctx.fillText(`I know ${quiz.name}`, 540, 560);
   const g = ctx.createLinearGradient(300, 0, 780, 0);
   g.addColorStop(0, '#5b3df5');
@@ -474,6 +493,13 @@ $('#reportBtn').addEventListener('click', async () => {
 });
 
 // ---------- Boot ----------
+function restart(message) {
+  store.del('kn_att_' + id);
+  attempt = null;
+  quiz = null;
+  boot().then(() => { if (quiz && message) toast(message); });
+}
+
 async function resume() {
   try {
     const st = await api(`attempts/${attempt.id}`, { headers: { 'x-token': attempt.token } });
